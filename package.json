@@ -1,0 +1,15 @@
+{
+  "name": "household-finance",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Links personal bank accounts through Plaid and keeps balances and transactions in Cloudflare D1 for Mancil's AI OS finance dashboard.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "logs": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.163.0"
+  }
+}

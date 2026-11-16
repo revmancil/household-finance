@@ -1,0 +1,18 @@
+name = "household-finance"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+PLAID_ENV = "production"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "household-finance"
+database_id = "b9e7175a-13e0-4058-be24-9a94a5fef35d"
+
+# Sync at about 5:15 AM and 5:15 PM Central (UTC times).
+[triggers]
+crons = ["15 11 * * *", "15 23 * * *"]
+
+[observability]
+enabled = true
