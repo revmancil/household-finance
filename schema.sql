@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS accounts (
   currency       TEXT,
   hidden         INTEGER NOT NULL DEFAULT 0,
   nickname       TEXT,
+  purpose        TEXT,                     -- what the account is for (set by hand)
+  keep_min       REAL,                     -- balance to keep in it, if any
   updated_at     TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
