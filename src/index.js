@@ -151,12 +151,14 @@ async function syncItem(env, itemId) {
          ON CONFLICT(account_id, date) DO UPDATE SET current = excluded.current, available = excluded.available`
       ).bind(a.account_id, today, b.current ?? null, b.available ?? null));
     }
-    if (acc.item?.institution_id && !item.institution_name) {
+    // Bank name, logo and brand color as Plaid supplies them (logo is a base64 PNG; some banks have none).
+    if (acc.item?.institution_id && (!item.institution_name || !item.logo_checked_at)) {
       try {
-        const inst = await plaid(env, "/institutions/get_by_id", { institution_id: acc.item.institution_id, country_codes: ["US"] });
-        stmts.push(env.DB.prepare("UPDATE items SET institution_id = ?, institution_name = ? WHERE item_id = ?")
-          .bind(acc.item.institution_id, inst.institution?.name || null, itemId));
-      } catch (_) { /* name is cosmetic */ }
+        const inst = await plaid(env, "/institutions/get_by_id", { institution_id: acc.item.institution_id, country_codes: ["US"], options: { include_optional_metadata: true } });
+        const i = inst.institution || {};
+        stmts.push(env.DB.prepare("UPDATE items SET institution_id = ?, institution_name = coalesce(?, institution_name), logo = ?, primary_color = ?, logo_checked_at = datetime('now') WHERE item_id = ?")
+          .bind(acc.item.institution_id, i.name || null, i.logo || null, i.primary_color || null, itemId));
+      } catch (_) { /* name and logo are cosmetic */ }
     }
     if (stmts.length) await env.DB.batch(stmts);
 

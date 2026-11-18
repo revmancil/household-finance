@@ -11,6 +11,9 @@ CREATE TABLE IF NOT EXISTS items (
   error_code       TEXT,
   error_message    TEXT,
   last_synced_at   TEXT,
+  logo             TEXT,                   -- base64 PNG from Plaid institution metadata (may be null)
+  primary_color    TEXT,
+  logo_checked_at  TEXT,
   created_at       TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
